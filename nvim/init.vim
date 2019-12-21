@@ -10,14 +10,26 @@ endif
 
 call plug#begin()
 
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'flazz/vim-colorschemes'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
 Plug 'junegunn/vim-easy-align'
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'honza/vim-snippets'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 call plug#end()
 
+" Airline plugin configurations
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+colorscheme gruvbox
+hi Normal guibg=NONE ctermbg=NONE
+
+set nocompatible
 set hidden
 set nobackup
 set nowritebackup
@@ -35,12 +47,17 @@ inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
+                                           \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
+let g:coc_snippet_next = '<Tab>'
+let g:coc_snippet_prev = '<S-Tab>'
 
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -135,5 +152,28 @@ nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
-nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>b
 
+set expandtab
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+match ErrorMsg '\s\+$'         " marks trailing whitespaces as error messages
+set backspace=indent,eol,start " allow backspace over everything in insert
+set number    		" show line numbers
+set relativenumber 	" make the line numbers relative to the active
+set laststatus=2    " always show the statusbar
+set showtabline=2   " Always display the tabline, even if there is only one tab
+set showcmd 		" show command in bottom bar
+set cursorline      " highlight cursor line
+set wildmenu        " visual autocomplete for command menu
+filetype indent on  " load filetype-specific indent files
+set lazyredraw      " redraw only when needed
+set showmatch       " highlight matching
+
+" searching setup
+set incsearch       " search as characters are entered
+set hlsearch        " hightlight matches
+
+" remove trailing whitespaces in the file on save automatically
+autocmd BufWritePre * %s/\s\+$//e
