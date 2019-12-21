@@ -28,19 +28,20 @@ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'ervandew/supertab'
 Plug 'tpope/vim-commentary'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
-    " make YCM compatible with UltiSnips (using supertab)
-    let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-    let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-    let g:SuperTabDefaultCompletionType = '<C-n>'
-    " let g:ycm_autoclose_preview_window_after_completion = 1
-    let g:ycm_seed_identifiers_with_syntax = 1
-    let g:ycm_collect_identifiers_from_tags_files = 1
+" Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
+"     " make YCM compatible with UltiSnips (using supertab)
+"     let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+"     let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+"     let g:SuperTabDefaultCompletionType = '<C-n>'
+"     let g:ycm_autoclose_preview_window_after_insertion = 1
+"     let g:ycm_seed_identifiers_with_syntax = 1
+"     let g:ycm_collect_identifiers_from_tags_files = 1
 
-    nnoremap <silent> <leader>jd :YcmCompleter GoTo<CR>
-    nnoremap <silent> <leader>ff :YcmCompleter FixIt<CR>
-" }}}
-Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
+"     nnoremap <silent> <leader>jd :YcmCompleter GoTo<CR>
+"     nnoremap <silent> <leader>ff :YcmCompleter FixIt<CR>
+" " }}}
+" Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 " {{{
@@ -83,6 +84,18 @@ Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align'
     let g:easy_align_ignore_comment = 0 " align comments
     vnoremap <silent> <Enter> :EasyAlign<cr>
+
+Plug 'vimwiki/vimwiki'
+    let g:vimwiki_list = [{ 'path': '~/Dropbox/wiki/', 'ext':'.md', 'syntax':'markdown'}]
+Plug 'lervag/vimtex'
+    let g:tex_flavor='latex'
+    let g:vimtex_view_method='zathura'
+    let g:vimtex_quickfix_mode=0
+
+Plug 'KeitaNakamura/tex-conceal.vim'
+    set conceallevel=1
+    let g:tex_conceal='abdmg'
+
 call plug#end()
 
 set expandtab
@@ -91,6 +104,9 @@ set softtabstop=4
 set shiftwidth=4
 match ErrorMsg '\s\+$'         " marks trailing whitespaces as error messages
 set backspace=indent,eol,start " allow backspace over everything in insert
+" setlocal spell
+" set spelllang=en_us
+" inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
 
 " Visual setup
 colorscheme monokai-phoenix
