@@ -1,6 +1,20 @@
-let g:python_host_prog = '~/anaconda3/envs/python2.7/bin/python'
-let g:python3_host_prog = '~/anaconda3/envs/python3.6/bin/python'
+"   _       _ _         _
+"  (_)     (_) |       (_)
+"   _ _ __  _| |___   ___ _ __ ___
+"  | | '_ \| | __\ \ / / | '_ ` _ \
+"  | | | | | | |_ \ V /| | | | | | |
+"  |_|_| |_|_|\__(_)_/ |_|_| |_| |_|
+"
 
+    let g:mapleader = "\<space>"
+    let g:python_host_prog = '~/anaconda3/envs/python2.7/bin/python'
+    let g:python3_host_prog = '~/anaconda3/envs/python3.6/bin/python'
+
+
+
+"******************************************************************************
+"    Vim Plugins
+"******************************************************************************
 " Autoload VIM Plug
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
   silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
@@ -9,37 +23,79 @@ if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
 endif
 
 call plug#begin()
-
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'flazz/vim-colorschemes'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-commentary'
-Plug 'junegunn/vim-easy-align'
-Plug 'honza/vim-snippets'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
+    Plug 'flazz/vim-colorschemes'
+    Plug 'tpope/vim-surround'
+    Plug 'tpope/vim-commentary'
+    Plug 'junegunn/vim-easy-align'
+    Plug 'christoomey/vim-tmux-navigator'
+    Plug 'honza/vim-snippets'
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+    Plug 'junegunn/fzf.vim'
+    Plug 'vimwiki/vimwiki'
 call plug#end()
 
-" Airline plugin configurations
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
-colorscheme gruvbox
-hi Normal guibg=NONE ctermbg=NONE
+"******************************************************************************
+" Some basic setup
+"******************************************************************************
+    set hidden                              " ensure hidden buffers are not abandoned
+    set shortmess+=c                        " setting to get shortmessage
+    set signcolumn=yes                      " ensure that signcolumn exists for linting and other purposes
+    set nobackup nowritebackup              " make no backups of file before overwriting file
+    set updatetime=300                      " length of time vim waits to trigger commands after typing stops
+    set expandtab tabstop=4 softtabstop=4   " replace tabs with 4 spaces
+    set shiftwidth=4                        " spaces to use for autoindent
+    match ErrorMsg '\s\+$'                  " marks trailing whitespaces as error messages
+    set backspace=indent,eol,start          " allow backspace over everything in insert
+    set number relativenumber    		    " show line number and make the line numbers relative to the active
+    set showtabline=2                       " Always display the tabline, even if there is only one tab
+    set cursorline                          " highlight cursor line
+    set lazyredraw                          " redraw only when needed
+    set showmatch                           " highlight matching parentheses or other surrounding character
+    set splitbelow splitright               " splits open at the bottom and right
+    autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions -=o
+                                            " Disables automatic commenting on
+                                            " newline
+    autocmd BufWritePre * %s/\s\+$//e       " remove trailing whitespaces on filesave
+    autocmd BufWritePost $MYVIMRC source % | redraw
+                                            " auto source VIMRC on save
 
-set nocompatible
-set hidden
-set nobackup
-set nowritebackup
-set cmdheight=1
-set updatetime=300
+"******************************************************************************
+" Plugin configurations
+"******************************************************************************
 
-set shortmess+=c
+" Airline configurations
+    let g:airline#extensions#tabline#enabled = 1
+    let g:airline#extensions#tabline#buffer_nr_show = 1
+    let g:airline_powerline_fonts = 1
 
-" always show signcolumns
-set signcolumn=yes
+" Colorscheme configurations
+    colorscheme gruvbox
+    hi Normal guibg=NONE ctermbg=NONE
+
+" fzf configurations
+  " let $FZF_DEFAULT_OPTS .= ' --border --margin=0,2'
+  " function! FloatingFZF()
+  "   let width = float2nr(&columns * 0.9)
+  "   let height = float2nr(&lines * 0.6)
+  "   let opts = { 'relative': 'editor',
+  "              \ 'row': (&lines - height) / 2,
+  "              \ 'col': (&columns - width) / 2,
+  "              \ 'width': width,
+  "              \ 'height': height }
+
+  "   let win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
+  "   call setwinvar(win, '&winhighlight', 'NormalFloat:Normal')
+  " endfunction
+  " let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+
+" Vimwiki configurations
+    let g:vimwiki_list = [{ 'path': '~/Dropbox/wiki/', 'ext':'.md', 'syntax':'markdown'}]
+
+" coc.nvim configurations
 
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
@@ -47,8 +103,11 @@ inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
-                                           \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+inoremap <silent><expr> <cr>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
@@ -154,26 +213,10 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>b
 
-set expandtab
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-match ErrorMsg '\s\+$'         " marks trailing whitespaces as error messages
-set backspace=indent,eol,start " allow backspace over everything in insert
-set number    		" show line numbers
-set relativenumber 	" make the line numbers relative to the active
-set laststatus=2    " always show the statusbar
-set showtabline=2   " Always display the tabline, even if there is only one tab
-set showcmd 		" show command in bottom bar
-set cursorline      " highlight cursor line
-set wildmenu        " visual autocomplete for command menu
-filetype indent on  " load filetype-specific indent files
-set lazyredraw      " redraw only when needed
-set showmatch       " highlight matching
+" fuzzy find files in the working directory (where you launched Vim from)
+" nmap <leader>f :Files<cr>
+" nmap <leader>/ :BLines<cr>   " fuzzy find lines in the current file
+" nmap <leader>b :Buffers<cr>  " fuzzy find an open buffer
+" nmap <leader>r :Rg           " fuzzy find text in the working directory
+" nmap <leader>c :Commands<cr> " fuzzy find Vim commands (like Ctrl-Shift-P in Sublime/Atom/VSC)
 
-" searching setup
-set incsearch       " search as characters are entered
-set hlsearch        " hightlight matches
-
-" remove trailing whitespaces in the file on save automatically
-autocmd BufWritePre * %s/\s\+$//e
