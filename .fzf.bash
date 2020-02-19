@@ -11,5 +11,3 @@ fi
 # Key bindings
 # ------------
 source "/home/akashsharma/.fzf/shell/key-bindings.bash"
-export FZF_TMUX=1
-
