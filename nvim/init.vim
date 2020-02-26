@@ -36,6 +36,7 @@ call plug#begin()
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     Plug 'junegunn/fzf.vim'
     Plug 'vimwiki/vimwiki'
+    Plug 'sbdchd/neoformat'
 call plug#end()
 
 "******************************************************************************
@@ -237,3 +238,11 @@ call plug#end()
     " Resume latest coc list
     nnoremap <silent> <space>p  :<C-u>CocListResume<CR>b
 
+" Neoformat configurations
+    let g:neoformat_enabled_python=['yapf']
+    " Enable alignment
+    let g:neoformat_basic_format_align = 1
+    " Enable tab to spaces conversion
+    let g:neoformat_basic_format_retab = 1
+    " Enable trimmming of trailing whitespace
+    let g:neoformat_basic_format_trim = 1
