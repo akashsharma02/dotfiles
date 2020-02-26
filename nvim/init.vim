@@ -57,8 +57,7 @@ call plug#end()
     set lazyredraw                          " redraw only when needed
     set showmatch                           " highlight matching parentheses or other surrounding character
     set splitbelow splitright               " splits open at the bottom and right
-    autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions -=o
-                                            " Disables automatic commenting on
+    autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions -=o " Disables automatic commenting on
                                             " newline
     autocmd BufWritePre * %s/\s\+$//e       " remove trailing whitespaces on filesave
     autocmd BufWritePost $MYVIMRC source % | redraw
@@ -237,6 +236,8 @@ call plug#end()
     nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
     " Resume latest coc list
     nnoremap <silent> <space>p  :<C-u>CocListResume<CR>b
+    " Open yank list
+    nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
 
 " Neoformat configurations
     let g:neoformat_enabled_python=['yapf']

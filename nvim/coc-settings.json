@@ -1,5 +1,5 @@
 {
-  "languageserver": {
+    "languageserver": {
     "ccls": {
       "command": "ccls",
       "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
@@ -10,5 +10,9 @@
          }
        }
     }
-  }
+    },
+    "git.enableGutters": true,
+
+    "python.linting.enabled": true,
+    "python.formatting.provider": "yapf"
 }

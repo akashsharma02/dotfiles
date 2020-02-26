@@ -116,7 +116,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-source /opt/ros/melodic/setup.bash
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
