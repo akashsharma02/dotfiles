@@ -241,6 +241,10 @@ call plug#end()
 
 " Neoformat configurations
     let g:neoformat_enabled_python=['yapf']
+    let g:neoformat_c_clangformat = {
+            \ 'exe': 'clang-format',
+            \ 'args': ['-style=file'],
+            \ }
     " Enable alignment
     let g:neoformat_basic_format_align = 1
     " Enable tab to spaces conversion

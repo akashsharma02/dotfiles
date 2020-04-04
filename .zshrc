@@ -1,3 +1,4 @@
+ZSH_DISABLE_COMPFIX="true"
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -87,11 +88,11 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='nvim'
+else
+  export EDITOR='nvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -111,6 +112,7 @@ alias open="xdg-open"
 alias vim="nvim"
 alias zshconfig="nvim ~/.zshrc"
 alias ohmyzsh="nvim ~/.oh-my-zsh"
+alias tmat="matlab -nodisplay -nosplash"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -151,3 +153,12 @@ unset __conda_setup
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Export CCache path
+export PATH="/usr/lib/ccache:$PATH"
+
+# Install Ruby gems to ~gems
+export GEM_HOME="$HOME/gems"
+export PATH="$HOME/gems/bin:$PATH"
+
+export OPENCV_TEST_DATA_PATH="$HOME/Documents/projects/opencv/opencv_extra/testdata"
