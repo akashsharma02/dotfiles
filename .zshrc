@@ -112,6 +112,9 @@ alias vim="nvim"
 alias zshconfig="nvim ~/.zshrc"
 alias ohmyzsh="nvim ~/.oh-my-zsh"
 
+# Increase key speed via key rate change
+xset r rate 300 50
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 function cd() {
@@ -151,3 +154,7 @@ unset __conda_setup
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+
+export OPENCV_TEST_DATA_PATH=/home/akashsharma/Documents/projects/opencv/opencv_extra/testdata
+export CUDA_PATH=/usr/lib/cuda/bin/nvcc

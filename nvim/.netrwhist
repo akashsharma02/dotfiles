@@ -1,5 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =4
+let g:netrw_dirhistcnt =6
+let g:netrw_dirhist_6='/home/akashsharma/.config/gnome-session'
+let g:netrw_dirhist_5='/home/akashsharma/.config'
 let g:netrw_dirhist_4='/home/akashsharma/Documents/projects/particle_filter'
 let g:netrw_dirhist_3='/home/akashsharma/Documents/projects/modern-cmake/examples/extended-project/apps'
 let g:netrw_dirhist_2='/home/akashsharma/Documents/projects/particle_filter'

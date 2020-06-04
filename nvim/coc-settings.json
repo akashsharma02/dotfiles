@@ -1,17 +1,28 @@
 {
     "languageserver": {
-    "ccls": {
-      "command": "ccls",
+    "clangd": {
+      "command": "clangd-10",
       "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
-      "rootPatterns": [".ccls-root", "compile_commands.json"],
+      "rootPatterns": ["compile_flags.txt", "compile_commands.json"],
       "initializationOptions": {
-         "cache": {
-           "directory": ".ccls-cache"
-         }
-       }
+          "compilationDatabaseDirectory": "build",
+          "cache": {
+            "directory": ".clangd-cache"
+          }
+      }
+    },
+    "cmake": {
+      "command": "cmake-language-server",
+      "filetypes": ["cmake"],
+      "rootPatterns": [
+        "build/"
+      ],
+      "initializationOptions": {
+        "buildDirectory": "build"
+      }
     }
     },
-    "git.enableGutters": true,
+    "git.enableGutters": false,
 
     "python.linting.enabled": true,
     "python.formatting.provider": "yapf"

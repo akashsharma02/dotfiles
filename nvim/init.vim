@@ -56,13 +56,18 @@ call plug#end()
     set cursorline                          " highlight cursor line
     set lazyredraw                          " redraw only when needed
     set showmatch                           " highlight matching parentheses or other surrounding character
+    set clipboard+=unnamedplus              "Allow paste from outside vim clipboard buffer
     set splitbelow splitright               " splits open at the bottom and right
     autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions -=o " Disables automatic commenting on
                                             " newline
     autocmd BufWritePre * %s/\s\+$//e       " remove trailing whitespaces on filesave
     autocmd BufWritePost $MYVIMRC source % | redraw
                                             " auto source VIMRC on save
+    " Replace all with S instead of typing the whole substitute command
+    nnoremap S :%s//g<Left><Left>
 
+    " Spellchecker
+    " map <leader>o :setlocal spell! spelllang=en_us<CR>
 "******************************************************************************
 " Plugin configurations
 "******************************************************************************
@@ -202,10 +207,14 @@ call plug#end()
     xmap af <Plug>(coc-funcobj-a)
     omap if <Plug>(coc-funcobj-i)
     omap af <Plug>(coc-funcobj-a)
+    xmap ic <Plug>(coc-classobj-i)
+    omap ic <Plug>(coc-classobj-i)
+    xmap ac <Plug>(coc-classobj-a)
+    omap ac <Plug>(coc-classobj-a)
 
-    " Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
-    nmap <silent> <C-d> <Plug>(coc-range-select)
-    xmap <silent> <C-d> <Plug>(coc-range-select)
+    " Use <C-s> for select selections ranges, needs server support, like: coc-tsserver
+    nmap <silent> <C-s> <Plug>(coc-range-select)
+    xmap <silent> <C-s> <Plug>(coc-range-select)
 
     " Use `:Format` to format current buffer
     command! -nargs=0 Format :call CocAction('format')
