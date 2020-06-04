@@ -3,6 +3,8 @@
     "clangd": {
       "command": "clangd-10",
       "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
+      "command": "clangd",
+      "filetypes": ["c", "cpp", "objc", "objcpp"],
       "rootPatterns": ["compile_flags.txt", "compile_commands.json"],
       "initializationOptions": {
           "compilationDatabaseDirectory": "build",
