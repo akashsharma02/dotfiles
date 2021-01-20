@@ -33,21 +33,25 @@ Plug 'junegunn/vim-easy-align'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'honza/vim-snippets'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'metakirby5/codi.vim'
 Plug 'vimwiki/vimwiki'
-Plug 'sbdchd/neoformat'
+Plug 'lervag/vimtex'
+Plug 'liuchengxu/vim-which-key'
 call plug#end()
 
 "******************************************************************************
 " Some basic setup
 "******************************************************************************
+set mouse=n                             " enable mouse
 set hidden                              " ensure hidden buffers are not abandoned
+set nohlsearch                          " no need to manually remove highlighting after search is over
 set shortmess+=c                        " setting to get shortmessage
 set signcolumn=yes                      " ensure that signcolumn exists for linting and other purposes
 set nobackup nowritebackup              " make no backups of file before overwriting file
 set updatetime=300                      " length of time vim waits to trigger commands after typing stops
+set cmdheight=2                         " recommended by coc
 set expandtab tabstop=4 softtabstop=4   " replace tabs with 4 spaces
 set shiftwidth=4                        " spaces to use for autoindent
 match ErrorMsg '\s\+$'                  " marks trailing whitespaces as error messages
@@ -58,15 +62,20 @@ set cursorline                          " highlight cursor line
 set lazyredraw                          " redraw only when needed
 set showmatch                           " highlight matching parentheses or other surrounding character
 set clipboard+=unnamedplus              " Allow paste from outside vim clipboard buffer
+set foldmethod=syntax                   " Set folding method for file based on syntax
+set foldlevelstart=99                   " Start file completely unfolded
 set splitbelow splitright               " splits open at the bottom and right
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions -=o " Disables automatic commenting on
 " newline
 autocmd BufWritePre * %s/\s\+$//e       " remove trailing whitespaces on filesave
 " auto source VIMRC on save
 autocmd BufWritePost $MYVIMRC source % | redraw
+" reload template type files as common files for highlighting
+autocmd BufEnter *.tpp :setlocal filetype=cpp
+autocmd BufEnter *.tcu :setlocal filetype=cuda
 " Replace all with S instead of typing the whole substitute command
 nnoremap S :%s//g<Left><Left>
-
+nnoremap <Space>s/ :FlyGrep<cr>
 " Spellchecker
 " map <leader>o :setlocal spell! spelllang=en_us<CR>
 "******************************************************************************
@@ -77,6 +86,7 @@ nnoremap S :%s//g<Left><Left>
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#coc#enabled = 1
 
 " Colorscheme configurations
 colorscheme gruvbox
@@ -155,7 +165,11 @@ inoremap <silent><expr> <c-space> coc#refresh()
 " Coc only does snippet and additional edit on confirm.
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " Or use `complete_info` if your vim support it, like:
-" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
 
 " Use `[g` and `]g` to navigate diagnostics
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
@@ -170,14 +184,18 @@ nmap <silent> gr <Plug>(coc-references)
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
+    function! s:show_documentation()
+      if (index(['vim','help'], &filetype) >= 0)
         execute 'h '.expand('<cword>')
-    else
-        call CocAction('doHover')
+      elseif (coc#rpc#ready())
+        call CocActionAsync('doHover')
+      else
+        execute '!' . &keywordprg . " " . expand('<cword>')
+      endif
     endfunction
 
     " Highlight symbol under cursor on CursorHold
+    autocmd CursorHold * silent call CocActionAsync('highlight')
 
     " Remap for rename current word
     nmap <leader>rn <Plug>(coc-rename)
@@ -213,6 +231,16 @@ function! s:show_documentation()
     xmap ac <Plug>(coc-classobj-a)
     omap ac <Plug>(coc-classobj-a)
 
+    " Remap <C-f> and <C-b> for scroll float windows/popups.
+    if has('nvim-0.4.0') || has('patch-8.2.0750')
+      nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+      nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+      inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+      inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+      vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+      vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+    endif
+
     " Use <C-s> for select selections ranges, needs server support, like: coc-tsserver
     nmap <silent> <C-s> <Plug>(coc-range-select)
     xmap <silent> <C-s> <Plug>(coc-range-select)
@@ -225,9 +253,6 @@ function! s:show_documentation()
 
     " use `:OR` for organize import of current buffer
     command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-    " Add status line support, for integration with other plugin, checkout `:h coc-status`
-    set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
     " Using CocList
     " Show all diagnostics
@@ -249,23 +274,32 @@ function! s:show_documentation()
     " Open yank list
     nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
 
-    " Neoformat configurations
-    let g:neoformat_enabled_python=['yapf']
-    let g:neoformat_c_clangformat = {
-                \ 'exe': 'clang-format',
-                \ 'args': ['-style=file'],
-                \ }
-    " Enable alignment
-    let g:neoformat_basic_format_align = 1
-    " Enable tab to spaces conversion
-    let g:neoformat_basic_format_retab = 1
-    " Enable trimmming of trailing whitespace
-    let g:neoformat_basic_format_trim = 1
 
     " Fugitive configurations
     " Get git status
-    nmap <leader>gs :Gstatus<cr>
+    nmap <leader>gs :vert Gstatus<cr>
     " Choose merge selection from buffer 2
     nmap <leader>gf :diffget //2<cr>
     " Choose merge selection from buffer 3
     nmap <leader>gj :diffget //3<cr>
+
+
+    "Vimtex configurations
+    let g:tex_flavor='latex'
+    let g:vimtex_view_method='zathura'
+    let g:vimtex_quickfix_mode=0
+    set conceallevel=1
+    let g:tex_conceal='abdmg'
+    let g:vimtex_compiler_latexmk = {
+        \ 'build_dir' : './build'
+        \ }
+
+    "Codi configurations
+    " Change the color
+    let g:codi#virtual_text_prefix = "❯ "
+
+    "
+    let g:codi#aliases = {
+                       \ 'javascript.jsx': 'javascript',
+                       \ }
+

@@ -25,7 +25,5 @@
     }
     },
     "git.enableGutters": false,
-
-    "python.linting.enabled": true,
-    "python.formatting.provider": "yapf"
+    "python.formatting.autopep8Path": "/home/akashsharma/anaconda3/bin/autopep8"
 }
