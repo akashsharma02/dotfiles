@@ -138,6 +138,7 @@ function cd() {
         builtin cd "$dir" &> /dev/null
     done
 }
+# Function to synchronize folders automatically between server and local folder
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -165,3 +166,9 @@ export GEM_HOME="$HOME/gems"
 export PATH="$HOME/gems/bin:$PATH"
 
 export OPENCV_TEST_DATA_PATH="$HOME/Documents/projects/opencv/opencv_extra/testdata"
+
+_evalBg() {
+    eval "$@" &>/dev/null & disown;
+}
+
+PATH="$HOME/dotfiles/scripts:$PATH"
