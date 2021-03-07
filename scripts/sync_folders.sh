@@ -61,5 +61,5 @@ fi
 
 while inotifywait -r -e modify,create,delete $origin
 do
-     rsync -avz $origin/ $destination --delete --filter='P .git'
+     rsync -avz $origin/ $destination --filter='P .git'
 done

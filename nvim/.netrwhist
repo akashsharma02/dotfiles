@@ -1,5 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =7
+let g:netrw_dirhistcnt =9
+let g:netrw_dirhist_9='/home/akashsharma/Documents/projects/distributed-slam/src'
+let g:netrw_dirhist_8='/home/akashsharma/Documents/projects/nerf'
 let g:netrw_dirhist_7='/home/akashsharma/Documents/projects/visual-slam/vslam'
 let g:netrw_dirhist_6='/home/akashsharma/Documents/projects/visual-slam/.git'
 let g:netrw_dirhist_5='/home/akashsharma/Downloads/hw2_ekf_slam'
@@ -8,5 +10,3 @@ let g:netrw_dirhist_3='/home/akashsharma/.config'
 let g:netrw_dirhist_2='/home/akashsharma/.local'
 let g:netrw_dirhist_1='/home/akashsharma/Documents/CMU/16833-TA/16833_homework/SLAM_HW_ICP/problem_set_soln/ICP_fusion'
 let g:netrw_dirhist_0='/home/akashsharma/Documents/datasets/object-slam/tum-rgbd/rgbd_dataset_freiburg1_room/rgb'
-let g:netrw_dirhist_9='/home/akashsharma/Documents/CMU/16833-TA/16833_homework/SLAM_HW_EKF/problem_set_soln/EKF_slam'
-let g:netrw_dirhist_8='/home/akashsharma/Documents/projects/object-slam/3rdparty/detectron2/projects/PointRend/point_rend'
